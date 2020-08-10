@@ -37,7 +37,7 @@ def view_orders():
     # 여길 채워나가세요!
     result = list(db.orders.find({}, {'_id': False}))
 
-    return jsonify({'result': 'success', 'orders': 'order'})
+    return jsonify({'result': 'success', 'orders': result})
 
 
 if __name__ == '__main__':
