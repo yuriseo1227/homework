@@ -1,0 +1,71 @@
+function order() {
+
+
+            if ($('#order-name').val() == '') {
+                alert('이름을 입력해주세요')
+            } else if ($('#order-count').val() == '1인당 최대 구매가능한 개수는 3개입니다.') {
+                alert('수량을 입력해주세요')
+            } else if ($('#order-address').val() == '') {
+                alert('주소를 입력해주세요')
+            } else if ($('#order-phone').val() == '') {
+                alert('전화번호를 입력해주세요')
+
+            } else {
+
+                // 1. 유저가 입력한 데이터를 #post-url과 #post-comment에서 가져오기
+
+
+                // 2. memo에 POST 방식으로 메모 생성 요청하기
+                $.ajax({
+                    type: "POST", // POST 방식으로 요청하겠다.
+                    url: "/order", // /memo라는 url에 요청하겠다.
+                    data: {
+                        'name': $("#order-name").val(),
+                        'count': $("#order-count").val(),
+                        'address': $("#order-address").val(),
+                        'phone': $("#order-phone").val()
+                    }, // 데이터를 주는 방법
+                    success: function (response) { // 성공하면
+                        if (response["result"] == "success") {
+                            alert("주문 성공!");
+                            // 3. 성공 시 페이지 새로고침하기
+                            window.location.reload();
+                        } else {
+                            alert("서버 오류!")
+                        }
+                    }
+                })
+
+            }
+        }
+
+        function showOrders() {
+            $.ajax({
+                type: "GET",
+                url: "/order",
+                data: {},
+                success: function (response) {
+                    if (response["result"] == "success") {
+                        console.log(response['orders']);
+                        let orders = response['orders'];
+                        for (let i = 0; i < orders.length; i++) {
+                            let name = orders[i]['name'];
+                            let count = orders[i]['count']
+                            let address = orders[i]['address']
+                            let phone = orders[i]['phone']
+
+                            let tempHtml = `    <tr>
+                                              <th scope="row">${name}</th>
+                                              <td>${count}</td>
+                                              <td>${address}</td>
+                                              <td>${phone}</td>
+                                            </tr>`;
+                            $('.table').append(tempHtml);
+                        }
+                    }
+                }
+            })
+        }
+
+
+    </script>
